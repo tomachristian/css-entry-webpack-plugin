@@ -1,0 +1,38 @@
+{
+    "version": "0.1.0",
+    "command": "gulp",
+    "isShellCommand": true,
+    "_runner": "terminal",
+    "tasks": [
+        {
+            "taskName": "build",
+            "args": [],
+            "isBuildCommand": true,
+            "isBackground": false,
+            "problemMatcher": [
+                "$tsc",
+                "$gulp-tsc"
+            ]
+        },
+        {
+            "taskName": "fast-build",
+            "args": ["--sourcemaps"],
+            "isBuildCommand": true,
+            "isBackground": false,
+            "problemMatcher": [
+                "$tsc",
+                "$gulp-tsc"
+            ]
+        },
+        {
+            "taskName": "test",
+            "args": [],
+            "isTestCommand": true
+        },
+        {
+            "taskName": "watch",
+            "args": [],
+            "isBackground": true
+        }
+    ]
+}

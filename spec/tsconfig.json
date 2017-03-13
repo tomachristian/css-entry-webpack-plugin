@@ -1,0 +1,10 @@
+{
+    "extends": "../tsconfig",
+    "compilerOptions": {
+        "types": [
+            "jasmine",
+            "node",
+            "bluebird-global"
+        ]
+    }
+}

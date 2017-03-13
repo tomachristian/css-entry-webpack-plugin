@@ -1,0 +1,62 @@
+{
+    "compilerOptions": {
+        // Output
+        "outDir": "./lib",
+        "target": "es6",
+        "module": "es6",
+        "sourceMap": true,
+        "declaration": true,
+        "removeComments": false,
+        "alwaysStrict": true,
+        "newLine": "LF",
+
+        // Module resolution, libs and types
+        "moduleResolution": "node",
+        "lib": [
+            "es5",
+            "es2015.core",
+            "es2015.collection",
+            "es2015.iterable",
+            "es2015.symbol",
+            "es2015.symbol.wellknown"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "packages/@types/*",
+                "*"
+            ]
+        },
+        "typeRoots": [
+            "./node_modules/@types",
+            "./packages/@types"
+        ],
+        /*"types": [
+            "node"
+        ],*/
+
+        // Type System
+        // Remove @internal annotated symbols from .d.ts files
+        "stripInternal": true,
+        "strictNullChecks": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "noImplicitAny": false, //TODO: fix this
+        "noImplicitReturns": true,
+        "noImplicitUseStrict": false,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitThis": true,
+        "allowSyntheticDefaultImports": true,
+        "importHelpers": true,
+
+        // Compiler
+        "diagnostics": true,
+        "pretty": true,
+        "listFiles": true,
+        "listEmittedFiles": true
+    },
+    "compileOnSave": false,
+    "include": [
+        "./src"
+    ]
+}

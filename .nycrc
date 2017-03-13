@@ -1,0 +1,11 @@
+{
+  "reporter": [
+    "html",
+    "text",
+    "lcov"
+  ],
+  "include": [
+    "**/lib/**/*.js", "**/src/**/*.ts"
+  ],
+  "cache": false
+}

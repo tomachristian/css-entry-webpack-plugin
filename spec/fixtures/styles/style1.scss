@@ -1,0 +1,17 @@
+.style1-class {
+    color: red;
+
+    .style1-sub-class {
+        color: green;
+    }
+}
+
+
+.error {
+    color: red;
+}
+
+.error2 {
+    @extend .error;
+    font-size: 10px;
+}
