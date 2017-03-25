@@ -69,7 +69,7 @@ describe("Running CssEntryPlugin and SassLoader for scss files", () => {
                 expect(this.webpack).toOutput({
                     file: "main.bundle.css.map",
                     withContent: [
-                        "fixtures/styles/style1.scss",
+                        "styles/style1.scss",
                         "@extend"
                     ]
                 });

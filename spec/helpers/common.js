@@ -169,7 +169,7 @@ const customMatchers = {
                                 return {
                                     pass: false,
                                     message: `Expected output file '${expected.file}' ` +
-                                             `to contain:\n` + expectedPart
+                                             `to contain:\n` + expectedPart + ". But it contains:\n" + fileContent
                                 }
                             }
                         }
