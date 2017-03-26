@@ -1,6 +1,6 @@
 {
   "name": "css-entry-webpack-plugin",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "author": "Cristian Toma",
   "description": "A Webpack plugin that allows CSS files as the entry.",
   "main": "lib/index.js",
