@@ -1,28 +1,89 @@
-import _ from "lodash";
-
 import { EntryInfo } from "./models";
 import CssEntryPluginError from "./CssEntryPluginError";
 
-export function normalizeOptions(options: Options): NormalizedOptions {
-    if (!options.extensions && !options.test) {
-        options.extensions = [".css", ".scss", ".less", ".styl"];
+// Follow the standard https://webpack.js.org/configuration/output/#output-filename
+const defaultOutputFilename = "[name].css",
+      defaultExtensions = [".css", ".scss", ".less", ".styl"];
+
+export function normalizeOptions(options?: Options): NormalizedOptions {
+    // Sanitize
+    if (!options) {
+        options = {};
+    }
+    else if (typeof options === "string" ||
+             typeof options === "function") {
+        options = {
+            output: {
+                filename: options
+            }
+        };
     }
 
-    let normalized: NormalizedOptions = {
+    if (typeof options !== "object") {
+        throw new CssEntryPluginError("'options' should be of type string, function or object");
+    }
+
+    return {
         disable: !!options.disable,
 
-        output: options.output,
+        output: normalizeOutputOptions(options.output),
 
-        includeCssEntry: () => true,
-        isValidCssEntryResource: () => true
+        includeCssEntry: makeIncludeCssEntry(options),
+        isCssResource: makeIsCssResource(options)
     };
+}
+
+function normalizeOutputOptions(options?: OutputOptions): NormalizedOutputOptions {
+    // Sanitize
+    if (!options || !options.filename) {
+        return {
+            filename: defaultOutputFilename
+        };
+    }
+
+    if (typeof options !== "object") {
+        throw new CssEntryPluginError("'output' option should be of type object");
+    }
+
+    if (typeof options.filename !== "string" &&
+        typeof options.filename !== "function") {
+        throw new CssEntryPluginError(
+            "'output.filename' option should be of type string or function");
+    }
+
+    return {
+        filename: options.filename
+    };
+}
+
+function makeIncludeCssEntry(options: OptionsObject): IncludeCssEntryFunction {
+    if (options.entries && options.ignoreEntries) {
+        throw new CssEntryPluginError("Both 'entries' and 'excludeEntries' specified");
+    }
+
+    if (options.entries) {
+        return entryConditionToMatcher(options.entries);
+    }
+
+    if (options.ignoreEntries) {
+        return entryConditionToMatcher(options.ignoreEntries, true);
+    }
+
+    return () => true;
+}
+
+function makeIsCssResource(options: OptionsObject): IsCssResourceFunction {
+    if (!options.extensions && !options.test) {
+        options.extensions = defaultExtensions;
+    }
 
     if (options.extensions && options.test) {
         throw new CssEntryPluginError("Both 'extensions' and 'test' specified");
     }
-    else if (options.extensions) {
-        if (!_.isArray(options.extensions) &&
-            !_.isString(options.extensions)) {
+
+    if (options.extensions) {
+        if (!Array.isArray(options.extensions) &&
+            typeof options.extensions !== "string") {
             throw new CssEntryPluginError(
                 "Option 'extensions' should be an array of strings or a string");
         }
@@ -31,7 +92,7 @@ export function normalizeOptions(options: Options): NormalizedOptions {
             ? [...options.extensions]
             : [options.extensions];
 
-        normalized.isValidCssEntryResource = (resource: string, entry: any) => {
+        return (resource: string, entry: any) => {
             for (let ext of extensions) {
                 if (resource.endsWith(ext)) return true;
             }
@@ -39,36 +100,27 @@ export function normalizeOptions(options: Options): NormalizedOptions {
             return false;
         };
     }
-    else if (options.test) {
-        if (!_.isFunction(options.test) &&
-            !_.isRegExp(options.test)) {
+
+    if (options.test) {
+        if (typeof options.test !== "function" &&
+            !(options.test instanceof RegExp)) {
             throw new CssEntryPluginError(
                 "Option 'test' should be a function or a regular expression");
         }
 
-        if (_.isRegExp(options.test)) {
+        if (options.test instanceof RegExp) {
             let regexp = options.test;
             options.test = (resource, entry) => regexp.test(resource);
         }
 
-        normalized.isValidCssEntryResource = options.test;
+        return options.test;
     }
 
-    if (options.entries && options.ignoreEntries) {
-        throw new CssEntryPluginError("Both 'entries' and 'excludeEntries' specified");
-    }
-    else if (options.entries) {
-        normalized.includeCssEntry = entryConditionToMatcher(options.entries);
-    }
-    else if (options.ignoreEntries) {
-        normalized.includeCssEntry = entryConditionToMatcher(options.ignoreEntries, true);
-    }
-
-    return normalized;
+    return () => true;
 }
 
-export function entryConditionToMatcher(
-    condition: EntryCondition, negate: boolean = false): (entry: EntryInfo) => boolean {
+function entryConditionToMatcher(
+    condition: EntryCondition, negate: boolean = false): IncludeCssEntryFunction {
     let fn = (entry: EntryInfo) => true;
 
     if (typeof condition === "string") {
@@ -80,7 +132,7 @@ export function entryConditionToMatcher(
     else if (condition instanceof RegExp) {
         fn = entry => condition.test(entry.name);
     }
-    else if (_.isFunction(condition)) {
+    else if (typeof condition === "function") {
         fn = condition;
     }
 
@@ -92,19 +144,13 @@ export function entryConditionToMatcher(
 export type EntryCondition = RegExp | string | string[] | ((entry: EntryInfo) => boolean);
 export type EntryResourceCondition = RegExp | ((resource: string, entry: EntryInfo) => boolean);
 
-export interface CssEntryPluginOutputOptions {
-    path?: string;
-    filename: string;
-    publicPath?: string;
-}
-
-export interface Options {
+export interface OptionsObject {
     disable?: boolean;
 
     /**
      * Output options.
      */
-    output: CssEntryPluginOutputOptions;
+    output?: OutputOptions;
 
     /**
      * The condition for the entries to include.
@@ -127,11 +173,34 @@ export interface Options {
     test?: EntryResourceCondition;
 }
 
+export interface OutputOptions {
+    /**
+     * This option determines the name of each output bundle.
+     * The bundle is written to the directory specified
+     * by the output.path option (specified in the Webpack configuration).
+     */
+    filename?: FilenameOption;
+}
+
+export type FilenameTemplate = string;
+export type GetPathFunction = (template: FilenameTemplate) => string;
+export type FilenameDynamicOption = (getPath: GetPathFunction) => string;
+export type FilenameOption = FilenameTemplate | FilenameDynamicOption;
+
+export type Options = FilenameOption | OptionsObject;
+
+export interface NormalizedOutputOptions {
+    filename: FilenameOption;
+}
+
 export interface NormalizedOptions {
     disable: boolean;
 
-    output: CssEntryPluginOutputOptions;
+    output: NormalizedOutputOptions;
 
-    includeCssEntry: (entry: EntryInfo) => boolean;
-    isValidCssEntryResource: (resource: string, entry: EntryInfo) => boolean;
+    includeCssEntry: IncludeCssEntryFunction;
+    isCssResource: IsCssResourceFunction;
 }
+
+export type IncludeCssEntryFunction = (entry: EntryInfo) => boolean;
+export type IsCssResourceFunction = (resource: string, entry: EntryInfo) => boolean;

@@ -19,7 +19,7 @@ export default class ExtractTextPlugin implements CompilerPlugin {
 
 export interface Options {
     /** the filename of the result file. May contain `[name]`, `[id]` and `[contenthash]` */
-    filename: string;
+    filename: string | ((getPath: ((template: string) => string)) => string);
     /** extract from all additional chunks too (by default it extracts only from the initial chunk(s)) */
     allChunks?: boolean;
     /** disables the plugin */

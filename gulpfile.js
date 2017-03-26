@@ -107,8 +107,8 @@ gulp.task("test", gulp.series("build", buildConfig.cover ? gulp.series("test:cov
             displayStacktrace: true
         }
     });
-
-    return gulp.src(path.join(specsDir, "**/*-spec.js"))
+    // TODO: Load glob from spec/support/jasmine.json (config)
+    return gulp.src(path.join(specsDir, "**/*.spec.js"))
         .pipe(jasmine({
             config: config,
             reporter: reporter

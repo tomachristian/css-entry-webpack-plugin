@@ -120,7 +120,7 @@ export default class CssEntryCompilation extends Tapable {
 
         // Single entry
         if (!entry.isMulti &&
-            this.options.isValidCssEntryResource(data.resource, entry)) {
+            this.options.isCssResource(data.resource, entry)) {
             // Valid single entry with valid css resource
             return true;
         }
@@ -149,7 +149,7 @@ export default class CssEntryCompilation extends Tapable {
 
         let resources = await this.resolveResources(multiModule);
         let hasOnlyCssResources = resources.every(resource =>
-            this.options.isValidCssEntryResource(resource, entryInfo));
+            this.options.isCssResource(resource, entryInfo));
 
         let taggedModule = multiModule as TaggedMultiModule;
         taggedModule[isCssEntry] = hasOnlyCssResources;

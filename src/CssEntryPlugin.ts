@@ -14,12 +14,7 @@ export default class CssEntryPlugin implements CompilerPlugin {
      * Creates a new instance of the CssEntryPlugin.
      * @param options The configuration options (required).
      */
-    public constructor(options: Options) {
-        if (!options) {
-            throw new CssEntryPluginError(
-                "Configuration options not provided for CssEntryPlugin");
-        }
-
+    public constructor(options?: Options) {
         this.options = normalizeOptions(options);
     }
 
@@ -58,5 +53,19 @@ export default class CssEntryPlugin implements CompilerPlugin {
 
             compilation.apply(new HtmlWebpackPluginCssEntryFix());
         });
+    }
+
+    /**
+     * Enables the plugin.
+     */
+    enable(): void {
+        this.options.disable = false;
+    }
+
+    /**
+     * Disables the plugin.
+     */
+    disable(): void {
+        this.options.disable = true;
     }
 }

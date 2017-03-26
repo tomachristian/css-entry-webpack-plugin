@@ -2,9 +2,9 @@ const path = require("path");
 const fs = require("fs");
 
 const rimraf = require("rimraf");
-const _ = require("lodash");
 
 const CssEntryPlugin = require("../../lib");
+const CssEntryPluginError = require("../../lib/CssEntryPluginError");
 const webpack = require("webpack");
 const webpackMerge = require("webpack-merge");
 
@@ -60,14 +60,16 @@ class WebpackTestFixture {
         return this;
     }
 
-    withCssEntryPlugin(cssEntryPluginConfig) {
-        const defaultCssEntryPluginConfig = {
-            output: {
-                filename: "[name].bundle.css"
-            }
-        };
+    withCssEntryPlugin(cssEntryPluginConfig, asIs) {
+        if (asIs !== true) {
+            const defaultCssEntryPluginConfig = {
+                output: {
+                    filename: "[name].bundle.css"   // TODO: Should be [name].css, like the default name
+                }
+            };
 
-        cssEntryPluginConfig = webpackMerge(defaultCssEntryPluginConfig, cssEntryPluginConfig);
+            cssEntryPluginConfig = webpackMerge(defaultCssEntryPluginConfig, cssEntryPluginConfig);
+        }
 
         return this.config({
             plugins: [
@@ -93,6 +95,10 @@ class WebpackTestFixture {
                 });
             }
             catch (err) {
+                this.result = {
+                    err: err,
+                    stats: null
+                };
                 reject(err);
             }
         });
@@ -148,7 +154,7 @@ const customMatchers = {
                         return {
                             pass: false,
                             message: `Expected webpack to output file '${expected.file}', ` +
-                                     `but the output file was not found.`
+                                     `but the output file was not found.` // TODO: List all the output files
                         }
                     }
 
@@ -281,7 +287,7 @@ function testWebpackWithCssEntryPlugin(webpackConfig, cssEntryPluginConfig, cb) 
         }
     };
 
-    if (!cb && _.isFunction(cssEntryPluginConfig)) {
+    if (!cb && typeof cssEntryPluginConfig === "function") {
         cb = cssEntryPluginConfig;
         cssEntryPluginConfig = defaultCssEntryPluginConfig;
     }
@@ -344,6 +350,9 @@ function expectHtmlOutputFileContent() {
 }
 
 ////
+
+global.CssEntryPlugin = CssEntryPlugin;
+global.CssEntryPluginError = CssEntryPluginError;
 
 global.fixtures = fixtures;
 global.webpackTestFixture = webpackTestFixture;
