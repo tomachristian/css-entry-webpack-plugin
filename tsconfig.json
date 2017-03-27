@@ -2,24 +2,24 @@
     "compilerOptions": {
         // Output
         "outDir": "./lib",
-        "target": "es6",
+        "target": "esnext",
         "module": "es6",
         "sourceMap": true,
-        "declaration": true,
+        "declaration": false,
         "removeComments": false,
         "alwaysStrict": true,
         "newLine": "LF",
 
         // Module resolution, libs and types
         "moduleResolution": "node",
-        "lib": [
+        /*"lib": [
             "es5",
             "es2015.core",
             "es2015.collection",
             "es2015.iterable",
             "es2015.symbol",
             "es2015.symbol.wellknown"
-        ],
+        ],*/
         "baseUrl": ".",
         "paths": {
             "*": [
@@ -47,7 +47,7 @@
         "noFallthroughCasesInSwitch": true,
         "noImplicitThis": true,
         "allowSyntheticDefaultImports": true,
-        "importHelpers": true,
+        /*"importHelpers": true,*/
 
         // Compiler
         "diagnostics": true,

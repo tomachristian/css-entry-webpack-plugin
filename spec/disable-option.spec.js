@@ -1,5 +1,5 @@
-describe("Running CssEntryPlugin disabled", () => {
-    beforeEach(done => {
+describe("Running CssEntryPlugin disabled", function () {
+    beforeEach(function (done) {
         this.webpack = webpackTestFixture(jasmine)
             .withCssEntryPlugin({
                 disable: true
@@ -7,17 +7,16 @@ describe("Running CssEntryPlugin disabled", () => {
             .cleanOutput(done);
     });
 
-    describe("configured with a shorthand single entry (.css)", () => {
-        beforeEach(done => {
+    describe("configured with a shorthand single entry (.css)", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: fixtures.style1.path
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates a single js bundle", () => {
+        it("generates a single js bundle", function () {
             expect(this.webpack).toOutput({
                 fileCount: 1,
                 file: "main.bundle.js",
@@ -26,17 +25,16 @@ describe("Running CssEntryPlugin disabled", () => {
         });
     });
 
-    describe("configured with a shorthand single entry (.js)", () => {
-        beforeEach(done => {
+    describe("configured with a shorthand single entry (.js)", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: fixtures.script1.path
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates a single js bundle", () => {
+        it("generates a single js bundle", function () {
             expect(this.webpack).toOutput({
                 fileCount: 1,
                 file: "main.bundle.js",
@@ -45,8 +43,8 @@ describe("Running CssEntryPlugin disabled", () => {
         });
     });
 
-    describe("configured with multi entry (1: .js, 2: .css)", () => {
-        beforeEach(done => {
+    describe("configured with multi entry (1: .js, 2: .css)", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -56,9 +54,8 @@ describe("Running CssEntryPlugin disabled", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates two js bundles", () => {
+        it("generates two js bundles", function () {
             expect(this.webpack).toOutput({
                 fileCount: 2
             });

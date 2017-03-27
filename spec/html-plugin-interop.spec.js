@@ -1,14 +1,14 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
-    beforeEach(done => {
+describe("Running CssEntryPlugin and HtmlWebpackPlugin", function () {
+    beforeEach(function (done) {
         this.webpack = webpackTestFixture(jasmine)
             .withCssEntryPlugin()
             .cleanOutput(done);
     });
 
-    describe("with default options", () => {
-        beforeEach(() => {
+    describe("with default options", function () {
+        beforeEach(function () {
             this.webpack
                 .config({
                     plugins: [
@@ -17,23 +17,24 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                 });
         });
 
-        describe("configured with a shorthand single entry", () => {
-            beforeEach(done => {
+        describe("configured with a shorthand single entry", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: fixtures.style1.path
                     })
                     .run(done);
             });
-            beforeEach(() => expect(this.webpack).toSucceed());
 
-            it("generates a single css bundle", () => {
+            it("generates a single css bundle and a single html file with the link for the css bundle", function () {
+                expect(this.webpack).toOutput({
+                    fileCount: 2
+                });
+
                 expect(this.webpack).toOutput({
                     content: fixtures.style1.content
                 });
-            });
 
-            it("generates a single html file with the link for the css bundle", () => {
                 expect(this.webpack).toOutput({
                     file: "index.html",
                     withContent: [
@@ -47,16 +48,10 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     ]
                 });
             });
-
-            it("generates the css bundle and html only", () => {
-                expect(this.webpack).toOutput({
-                    fileCount: 2
-                });
-            });
         });
 
-        describe("configured with two entries, both with one file each", () => {
-            beforeEach(done => {
+        describe("configured with two entries, both with one file each", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: {
@@ -66,9 +61,12 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     })
                     .run(done);
             });
-            beforeEach(() => expect(this.webpack).toSucceed());
 
-            it("generates two css bundles", () => {
+            it("generates two css bundles and a single html file with the links for the css bundles", function () {
+                expect(this.webpack).toOutput({
+                    fileCount: 3
+                });
+
                 expect(this.webpack).toOutput({
                     entry: "test1",
                     withContent: fixtures.style1.content
@@ -78,9 +76,7 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     entry: "test2",
                     withContent: fixtures.style2.content
                 });
-            });
 
-            it("generates a single html file with the links for the css bundles", () => {
                 expect(this.webpack).toOutput({
                     file: "index.html",
                     withContent: [
@@ -94,16 +90,10 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     ]
                 });
             });
-
-            it("generates the two css bundles and html only", () => {
-                expect(this.webpack).toOutput({
-                    fileCount: 3
-                });
-            });
         });
 
-        describe("with separate css and js entry points", () => {
-            beforeEach(done => {
+        describe("with separate css and js entry points", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: {
@@ -113,23 +103,22 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     })
                     .run(done);
             });
-            beforeEach(() => expect(this.webpack).toSucceed());
 
-            it("generates one css bundle", () => {
+            it("generates one css bundle, one js bundle and a single html file with the link for the css bundle and the script for the js bundle", function () {
+                expect(this.webpack).toOutput({
+                    fileCount: 3
+                });
+
                 expect(this.webpack).toOutput({
                     entry: "test1",
                     withContent: fixtures.style1.content
                 });
-            });
 
-            it("generates one js bundle", () => {
                 expect(this.webpack).toOutput({
                     file: "test2.bundle.js",
                     withContent: fixtures.script1.content
                 });
-            });
 
-            it("generates a single html file with the link for the css bundle and the script for the js bundle", () => {
                 expect(this.webpack).toOutput({
                     file: "index.html",
                     withContent: [
@@ -144,17 +133,11 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     ]
                 });
             });
-
-            it("generates one css bundle, a js bundle and html only", () => {
-                expect(this.webpack).toOutput({
-                    fileCount: 3
-                });
-            });
         });
     });
 
-    describe("with explicit chunks excluded", () => {
-        beforeEach(() => {
+    describe("with explicit chunks excluded", function () {
+        beforeEach(function () {
             this.webpack
                 .config({
                     plugins: [
@@ -165,8 +148,8 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                 });
         });
 
-        describe("configured with a single entry", () => {
-            beforeEach(done => {
+        describe("configured with a single entry", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: {
@@ -175,16 +158,17 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     })
                     .run(done);
             });
-            beforeEach(() => expect(this.webpack).toSucceed());
 
-            it("generates a single css bundle", () => {
+            it("generates a single css bundle and a single html file without the link for the css bundle", function () {
+                expect(this.webpack).toOutput({
+                    fileCount: 2
+                });
+
                 expect(this.webpack).toOutput({
                     entry: "test1",
                     withContent: fixtures.style1.content
                 });
-            });
 
-            it("generates a single html file without the link for the css bundle", () => {
                 expect(this.webpack).toOutput({
                     file: "index.html",
                     withoutContent: [
@@ -193,16 +177,10 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     ]
                 });
             });
-
-            it("generates the css bundle and html only", () => {
-                expect(this.webpack).toOutput({
-                    fileCount: 2
-                });
-            });
         });
 
-        describe("configured with two entries and one is excluded", () => {
-            beforeEach(done => {
+        describe("configured with two entries and one is excluded", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: {
@@ -212,9 +190,12 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     })
                     .run(done);
             });
-            beforeEach(() => expect(this.webpack).toSucceed());
 
-            it("generates two css bundles", () => {
+            it("generates two css bundles and a single html file without the link for the excluded css bundle", function () {
+                expect(this.webpack).toOutput({
+                    fileCount: 3
+                });
+
                 expect(this.webpack).toOutput({
                     entry: "test1",
                     withContent: fixtures.style1.content
@@ -224,9 +205,7 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     entry: "test2",
                     withContent: fixtures.style2.content
                 });
-            });
 
-            it("generates a single html file without the link for the excluded css bundle", () => {
                 expect(this.webpack).toOutput({
                     file: "index.html",
                     withContent: [
@@ -240,17 +219,11 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     ]
                 });
             });
-
-            it("generates the two css bundles and html only", () => {
-                expect(this.webpack).toOutput({
-                    fileCount: 3
-                });
-            });
         });
 
-        describe("with separate css and js entry points", () => {
-            describe("with css excluded", () => {
-                beforeEach(done => {
+        describe("with separate css and js entry points", function () {
+            describe("with css excluded", function () {
+                beforeEach(function (done) {
                     this.webpack
                         .config({
                             entry: {
@@ -260,23 +233,22 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                         })
                         .run(done);
                 });
-                beforeEach(() => expect(this.webpack).toSucceed());
 
-                it("generates one css bundle", () => {
+                it("generates one css bundle, one js bundle and a single html file with only the script for the js bundle", function () {
+                    expect(this.webpack).toOutput({
+                        fileCount: 3
+                    });
+
                     expect(this.webpack).toOutput({
                         entry: "test1",
                         withContent: fixtures.style1.content
                     });
-                });
 
-                it("generates one js bundle", () => {
                     expect(this.webpack).toOutput({
                         file: "test2.bundle.js",
                         withContent: fixtures.script1.content
                     });
-                });
 
-                it("generates a single html file with only the script for the js bundle", () => {
                     expect(this.webpack).toOutput({
                         file: "index.html",
                         withContent: [
@@ -291,16 +263,10 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                         ]
                     });
                 });
-
-                it("generates one css bundle, a js bundle and html only", () => {
-                    expect(this.webpack).toOutput({
-                        fileCount: 3
-                    });
-                });
             });
 
-            describe("with js excluded", () => {
-                beforeEach(done => {
+            describe("with js excluded", function () {
+                beforeEach(function (done) {
                     this.webpack
                         .config({
                             entry: {
@@ -310,23 +276,22 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                         })
                         .run(done);
                 });
-                beforeEach(() => expect(this.webpack).toSucceed());
 
-                it("generates one css bundle", () => {
+                it("generates one css bundle, one js bundle and a single html file with only the link for the css bundle", function () {
+                    expect(this.webpack).toOutput({
+                        fileCount: 3
+                    });
+
                     expect(this.webpack).toOutput({
                         entry: "test2",
                         withContent: fixtures.style1.content
                     });
-                });
 
-                it("generates one js bundle", () => {
                     expect(this.webpack).toOutput({
                         file: "test1.bundle.js",
                         withContent: fixtures.script1.content
                     });
-                });
 
-                it("generates a single html file with only the link for the css bundle", () => {
                     expect(this.webpack).toOutput({
                         file: "index.html",
                         withContent: [
@@ -340,18 +305,12 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                         ]
                     });
                 });
-
-                it("generates one css bundle, a js bundle and html only", () => {
-                    expect(this.webpack).toOutput({
-                        fileCount: 3
-                    });
-                });
             });
         });
     });
 
-    describe("with explicit chunks included", () => {
-        beforeEach(() => {
+    describe("with explicit chunks included", function () {
+        beforeEach(function () {
             this.webpack
                 .config({
                     plugins: [
@@ -362,8 +321,8 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                 });
         });
 
-        describe("configured with two entries and one is included", () => {
-            beforeEach(done => {
+        describe("configured with two entries and one is included", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: {
@@ -373,9 +332,12 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     })
                     .run(done);
             });
-            beforeEach(() => expect(this.webpack).toSucceed());
 
-            it("generates two css bundles", () => {
+            it("generates two css bundles and a single html file only with the link for the included css bundle", function () {
+                expect(this.webpack).toOutput({
+                    fileCount: 3
+                });
+
                 expect(this.webpack).toOutput({
                     entry: "test1",
                     withContent: fixtures.style1.content
@@ -385,9 +347,7 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                     entry: "test2",
                     withContent: fixtures.style2.content
                 });
-            });
 
-            it("generates a single html file only with the link for the included css bundle", () => {
                 expect(this.webpack).toOutput({
                     file: "index.html",
                     withContent: [
@@ -399,12 +359,6 @@ describe("Running CssEntryPlugin and HtmlWebpackPlugin", () => {
                         `<script`,
                         `<link href="test2.bundle.css" rel="stylesheet">`
                     ]
-                });
-            });
-
-            it("generates the two css bundles and html only", () => {
-                expect(this.webpack).toOutput({
-                    fileCount: 3
                 });
             });
         });

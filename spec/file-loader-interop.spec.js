@@ -1,5 +1,5 @@
-describe("Running CssEntryPlugin and FileLoader", () => {
-    beforeEach(done => {
+describe("Running CssEntryPlugin and FileLoader", function () {
+    beforeEach(function (done) {
         this.webpack = webpackTestFixture(jasmine)
             .withCssEntryPlugin()
             .config({
@@ -20,40 +20,35 @@ describe("Running CssEntryPlugin and FileLoader", () => {
             .cleanOutput(done);
     });
 
-    describe("configured with a shorthand single entry, that references a file", () => {
-        beforeEach(done => {
+    describe("configured with a shorthand single entry, that references a file", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: fixtures.style1WithImg1.path
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates a single css bundle with the referenced file path changed", () => {
+        it("generates a single css bundle with the referenced file path changed and the referenced file", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 2
+            });
+
             expect(this.webpack).toOutput({
                 content: [
                     ...fixtures.style1WithImg1.content,
                     `url(${fixtures.style1WithImg1.img1.file})`
                 ]
             });
-        });
 
-        it("generates the referenced file", () => {
             expect(this.webpack).toOutput({
                 file: fixtures.style1WithImg1.img1.file
             });
         });
-
-        it("generates the css bundle and referenced file only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 2
-            });
-        });
     });
 
-    describe("configured with a multi-main entry of two files, that both reference a file each", () => {
-        beforeEach(done => {
+    describe("configured with a multi-main entry of two files, that both reference a file each", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: [
@@ -63,9 +58,12 @@ describe("Running CssEntryPlugin and FileLoader", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates a single css bundle with the referenced file paths changed", () => {
+        it("generates a single css bundle with the referenced file paths changed and the referenced files", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 3
+            });
+
             expect(this.webpack).toOutput({
                 content: [
                     ...fixtures.style1WithImg1.content,
@@ -74,9 +72,7 @@ describe("Running CssEntryPlugin and FileLoader", () => {
                     `url(${fixtures.style1WithImg2.img2.file})`
                 ]
             });
-        });
 
-        it("generates the referenced files", () => {
             expect(this.webpack).toOutput({
                 file: fixtures.style1WithImg1.img1.file
             });
@@ -85,16 +81,10 @@ describe("Running CssEntryPlugin and FileLoader", () => {
                 file: fixtures.style1WithImg2.img2.file
             });
         });
-
-        it("generates the css bundle and both referenced files only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 3
-            });
-        });
     });
 
-    describe("configured with two entries of one file each, that both reference a file each", () => {
-        beforeEach(done => {
+    describe("configured with two entries of one file each, that both reference a file each", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -104,9 +94,12 @@ describe("Running CssEntryPlugin and FileLoader", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates two css bundles with the referenced file path changed", () => {
+        it("generates two css bundles with the referenced file path changed and the referenced files", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 4
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: [
@@ -122,9 +115,7 @@ describe("Running CssEntryPlugin and FileLoader", () => {
                     `url(${fixtures.style1WithImg2.img2.file})`
                 ]
             });
-        });
 
-        it("generates the referenced files", () => {
             expect(this.webpack).toOutput({
                 file: fixtures.style1WithImg1.img1.file
             });
@@ -133,16 +124,10 @@ describe("Running CssEntryPlugin and FileLoader", () => {
                 file: fixtures.style1WithImg2.img2.file
             });
         });
-
-        it("generates both css bundles and both referenced files only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 4
-            });
-        });
     });
 
-    describe("configured with two entries of one file each, that both reference the same file", () => {
-        beforeEach(done => {
+    describe("configured with two entries of one file each, that both reference the same file", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -152,9 +137,12 @@ describe("Running CssEntryPlugin and FileLoader", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates two css bundles with the referenced file path changed", () => {
+        it("generates two css bundles with the referenced file path changed", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 3
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: [
@@ -170,17 +158,9 @@ describe("Running CssEntryPlugin and FileLoader", () => {
                     `url(${fixtures.style2WithImg1.img1.file})`
                 ]
             });
-        });
 
-        it("generates the referenced file", () => {
             expect(this.webpack).toOutput({
                 file: fixtures.style1WithImg1.img1.file
-            });
-        });
-
-        it("generates both css bundles and the single referenced files only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 3
             });
         });
     });

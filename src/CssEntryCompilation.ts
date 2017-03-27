@@ -14,6 +14,7 @@ import CssEntryPluginError from "./CssEntryPluginError";
 // TODO: Add spec that it works with dynamic entry (function)
 // TODO: Test when two entries share a common file and one entry is excluded (when both are multi)
 // TODO: Spec for how many times a condition from options is called
+// TODO: Use compilation, without extending tapable, remove dependency
 /** @internal */
 export default class CssEntryCompilation extends Tapable {
     private breakingChangeErrorReported = false;

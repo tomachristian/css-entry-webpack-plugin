@@ -1,10 +1,10 @@
-describe("CssEntryPlugin", () => {
+describe("CssEntryPlugin", function () {
     beforeEach(cleanOutput);
 
-    it("generates a single output file for a single string entry point", done => {
+    it("generates a single output file for a single string entry point", function (done) {
         testWebpackWithCssEntryPlugin({
             entry: fixtures.style1.path
-        }, (err, stats) => {
+        }, function (err, stats) {
             expectNoErrorsAndNoWarnings(err, stats);
             expectOutputFileExists(stats);
             expectOutputFileToContain(stats, fixtures.style1.content);
@@ -12,12 +12,12 @@ describe("CssEntryPlugin", () => {
         });
     });
 
-    it("generates a single output file for a single object entry point", done => {
+    it("generates a single output file for a single object entry point", function (done) {
         testWebpackWithCssEntryPlugin({
             entry: {
                 "test": fixtures.style1.path
             }
-        }, (err, stats) => {
+        }, function (err, stats) {
             expectNoErrorsAndNoWarnings(err, stats);
             expectOutputFileExists(stats, "test");
             expectOutputFileToContain(stats, "test", fixtures.style1.content);
@@ -25,10 +25,10 @@ describe("CssEntryPlugin", () => {
         });
     });
 
-    it("generates a single output file for a single array entry point (one file path string)", done => {
+    it("generates a single output file for a single array entry point (one file path string)", function (done) {
         testWebpackWithCssEntryPlugin({
             entry: [fixtures.style1.path]
-        }, (err, stats) => {
+        }, function (err, stats) {
             expectNoErrorsAndNoWarnings(err, stats);
             expectOutputFileExists(stats);
             expectOutputFileToContain(stats, fixtures.style1.content);
@@ -36,13 +36,13 @@ describe("CssEntryPlugin", () => {
         });
     });
 
-    it("generates a single output file for a single array entry point (two file path strings)", done => {
+    it("generates a single output file for a single array entry point (two file path strings)", function (done) {
         testWebpackWithCssEntryPlugin({
             entry: [
                 fixtures.style1.path,
                 fixtures.style2.path
             ]
-        }, (err, stats) => {
+        }, function (err, stats) {
             expectNoErrorsAndNoWarnings(err, stats);
             expectOutputFileExists(stats);
             expectOutputFileToContain(stats, [
@@ -53,14 +53,14 @@ describe("CssEntryPlugin", () => {
         });
     });
 
-    it("generates a single output file for a single array entry point (three file path strings)", done => {
+    it("generates a single output file for a single array entry point (three file path strings)", function (done) {
         testWebpackWithCssEntryPlugin({
             entry: [
                 fixtures.style1.path,
                 fixtures.style2.path,
                 fixtures.style4.path
             ]
-        }, (err, stats) => {
+        }, function (err, stats) {
             expectNoErrorsAndNoWarnings(err, stats);
             expectOutputFileExists(stats);
             expectOutputFileToContain(stats, [
@@ -72,13 +72,13 @@ describe("CssEntryPlugin", () => {
         });
     });
 
-    it("generates two output files for two string entry points", done => {
+    it("generates two output files for two string entry points", function (done) {
         testWebpackWithCssEntryPlugin({
             entry: {
                 "test1": fixtures.style1.path,
                 "test2": fixtures.style2.path
             }
-        }, (err, stats) => {
+        }, function (err, stats) {
             expectNoErrorsAndNoWarnings(err, stats);
             expectOutputFileExists(stats, ["test1", "test2"]);
             expectOutputFileToContain(stats, "test1", fixtures.style1.content);
@@ -87,13 +87,13 @@ describe("CssEntryPlugin", () => {
         });
     });
 
-    it("generates two output files for one string entry point and one array entry point", done => {
+    it("generates two output files for one string entry point and one array entry point", function (done) {
         testWebpackWithCssEntryPlugin({
             entry: {
                 "test1": fixtures.style1.path,
                 "test2": [fixtures.style2.path, fixtures.style4.path]
             }
-        }, (err, stats) => {
+        }, function (err, stats) {
             expectNoErrorsAndNoWarnings(err, stats);
             expectOutputFileExists(stats, ["test1", "test2"]);
             expectOutputFileToContain(stats, "test1", fixtures.style1.content);
@@ -105,13 +105,13 @@ describe("CssEntryPlugin", () => {
         });
     });
 
-    it("generates two output files for two array entry points", done => {
+    it("generates two output files for two array entry points", function (done) {
         testWebpackWithCssEntryPlugin({
             entry: {
                 "test1": [fixtures.style1.path, fixtures.style5.path],
                 "test2": [fixtures.style2.path, fixtures.style4.path]
             }
-        }, (err, stats) => {
+        }, function (err, stats) {
             expectNoErrorsAndNoWarnings(err, stats);
             expectOutputFileExists(stats, ["test1", "test2"]);
             expectOutputFileToContain(stats, "test1", [
@@ -126,15 +126,15 @@ describe("CssEntryPlugin", () => {
         });
     });
 
-    describe("when css entry chunks share modules", () => {
-        describe("and one entry point is a single string path", () => {
-            it("generates two output files that both have a common module", done => {
+    describe("when css entry chunks share modules", function () {
+        describe("and one entry point is a single string path", function () {
+            it("generates two output files that both have a common module", function (done) {
                 testWebpackWithCssEntryPlugin({
                     entry: {
                         "test1": [fixtures.style1.path, fixtures.style5.path],
                         "test2": fixtures.style1.path
                     }
-                }, (err, stats) => {
+                }, function (err, stats) {
                     expectNoErrorsAndNoWarnings(err, stats);
                     expectOutputFileExists(stats, ["test1", "test2"]);
                     expectOutputFileToContain(stats, "test1", [
@@ -147,13 +147,13 @@ describe("CssEntryPlugin", () => {
             });
         });
 
-        it("generates two output files that both have a common module", done => {
+        it("generates two output files that both have a common module", function (done) {
             testWebpackWithCssEntryPlugin({
                 entry: {
                     "test1": [fixtures.style1.path, fixtures.style5.path],
                     "test2": [fixtures.style1.path, fixtures.style4.path]
                 }
-            }, (err, stats) => {
+            }, function (err, stats) {
                 expectNoErrorsAndNoWarnings(err, stats);
                 expectOutputFileExists(stats, ["test1", "test2"]);
                 expectOutputFileToContain(stats, "test1", [
@@ -168,14 +168,14 @@ describe("CssEntryPlugin", () => {
             });
         });
 
-        it("generates three output files of which all have a common module", done => {
+        it("generates three output files of which all have a common module", function (done) {
             testWebpackWithCssEntryPlugin({
                 entry: {
                     "test1": [fixtures.style5.path, fixtures.style1.path],
                     "test2": [fixtures.style1.path, fixtures.style4.path],
                     "test3": [fixtures.style2.path, fixtures.style1.path]
                 }
-            }, (err, stats) => {
+            }, function (err, stats) {
                 expectNoErrorsAndNoWarnings(err, stats);
                 expectOutputFileExists(stats, ["test1", "test2", "test3"]);
                 expectOutputFileToContain(stats, "test1", [
@@ -194,7 +194,7 @@ describe("CssEntryPlugin", () => {
             });
         });
 
-        it("generates four output files of which all have a common module", done => {
+        it("generates four output files of which all have a common module", function (done) {
             testWebpackWithCssEntryPlugin({
                 entry: {
                     "test1": [fixtures.style5.path, fixtures.style1.path],
@@ -202,7 +202,7 @@ describe("CssEntryPlugin", () => {
                     "test3": [fixtures.style2.path, fixtures.style1.path],
                     "test4": fixtures.style1.path
                 }
-            }, (err, stats) => {
+            }, function (err, stats) {
                 expectNoErrorsAndNoWarnings(err, stats);
                 expectOutputFileExists(stats, ["test1", "test2", "test3", "test4"]);
                 expectOutputFileToContain(stats, "test1", [
@@ -222,7 +222,7 @@ describe("CssEntryPlugin", () => {
             });
         });
 
-        it("generates four output files of which pairs of two have a common module", done => {
+        it("generates four output files of which pairs of two have a common module", function (done) {
             testWebpackWithCssEntryPlugin({
                 entry: {
                     "test1": [fixtures.style1.path, fixtures.style2.path],
@@ -230,7 +230,7 @@ describe("CssEntryPlugin", () => {
                     "test3": [fixtures.style4.path, fixtures.style5.path],
                     "test4": [fixtures.style5.path, fixtures.style1.path]
                 }
-            }, (err, stats) => {
+            }, function (err, stats) {
                 expectNoErrorsAndNoWarnings(err, stats);
                 expectOutputFileExists(stats, ["test1", "test2", "test3", "test4"]);
                 expectOutputFileToContain(stats, "test1", [

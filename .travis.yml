@@ -1,6 +1,18 @@
 sudo: false
 language: node_js
 
-node_js:
-  - "node"
+matrix:
+  include:
+    - os: linux
+      node_js: "7"
+    - os: osx
+      node_js: "7"
+    - os: linux
+      node_js: "6"
+    - os: linux
+      node_js: "4.3"
+  allow_failures:
+    - os: osx
+  fast_finish: true
+
 script: npm test

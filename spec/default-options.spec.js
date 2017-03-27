@@ -1,17 +1,17 @@
-describe("Running CssEntryPlugin", () => {
-    beforeEach(done => {
+describe("Running CssEntryPlugin", function () {
+    beforeEach(function (done) {
         this.webpack = webpackTestFixture(jasmine)
             .cleanOutput(done);
     });
 
-    describe("without options", () => {
-        beforeEach(() => {
+    describe("without options", function () {
+        beforeEach(function () {
             this.webpack
                 .withCssEntryPlugin(null, true);
         });
 
-        describe("configured with a shorthand single entry (.css)", () => {
-            beforeEach(done => {
+        describe("configured with a shorthand single entry (.css)", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: fixtures.style1.path
@@ -19,9 +19,7 @@ describe("Running CssEntryPlugin", () => {
                     .run(done);
             });
 
-            it("generates a single css bundle with the default filename", () => {
-                expect(this.webpack).toSucceed();
-
+            it("generates a single css bundle with the default filename", function () {
                 expect(this.webpack).toOutput({
                     fileCount: 1,
                     file: "main.css",
@@ -30,8 +28,8 @@ describe("Running CssEntryPlugin", () => {
             });
         });
 
-        describe("configured with multi entry (1: .js, 2: .css)", () => {
-            beforeEach(done => {
+        describe("configured with multi entry (1: .js, 2: .css)", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: {
@@ -42,9 +40,7 @@ describe("Running CssEntryPlugin", () => {
                     .run(done);
             });
 
-            it("generates one js bundle and one css bundle with the default filename", () => {
-                expect(this.webpack).toSucceed();
-
+            it("generates one js bundle and one css bundle with the default filename", function () {
                 expect(this.webpack).toOutput({
                     fileCount: 2
                 });
@@ -62,15 +58,15 @@ describe("Running CssEntryPlugin", () => {
         });
     });
 
-    describe("configured with empty object options", () => {
-        beforeEach(done => {
+    describe("configured with empty object options", function () {
+        beforeEach(function (done) {
             this.webpack = webpackTestFixture(jasmine)
                 .withCssEntryPlugin({}, true)
                 .cleanOutput(done);
         });
 
-        describe("configured with a shorthand single entry (.css)", () => {
-            beforeEach(done => {
+        describe("configured with a shorthand single entry (.css)", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: fixtures.style1.path
@@ -78,9 +74,7 @@ describe("Running CssEntryPlugin", () => {
                     .run(done);
             });
 
-            it("generates a single css bundle with the default filename", () => {
-                expect(this.webpack).toSucceed();
-
+            it("generates a single css bundle with the default filename", function () {
                 expect(this.webpack).toOutput({
                     fileCount: 1,
                     file: "main.css",
@@ -89,8 +83,8 @@ describe("Running CssEntryPlugin", () => {
             });
         });
 
-        describe("configured with multi entry (1: .js, 2: .css)", () => {
-            beforeEach(done => {
+        describe("configured with multi entry (1: .js, 2: .css)", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: {
@@ -101,9 +95,7 @@ describe("Running CssEntryPlugin", () => {
                     .run(done);
             });
 
-            it("generates one js bundle and one css bundle with the default filename", () => {
-                expect(this.webpack).toSucceed();
-
+            it("generates one js bundle and one css bundle with the default filename", function () {
                 expect(this.webpack).toOutput({
                     fileCount: 2
                 });

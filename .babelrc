@@ -1,9 +1,4 @@
+// Used for .babel.js files
 {
-    "presets": [
-        ["env", { "targets": { "node": true } }]
-    ],
-    "plugins": [
-        "add-module-exports",
-        "transform-promise-to-bluebird"
-    ]
+  "presets": ["es2015"]
 }

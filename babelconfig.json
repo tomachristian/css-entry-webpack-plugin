@@ -1,0 +1,42 @@
+[
+    {
+        "plugins": [
+            [
+                "transform-regenerator",
+                {
+                    "asyncGenerators": false,
+                    "generators": true,
+                    "async": false
+                }
+            ],
+            [
+                "transform-async-to-module-method",
+                {
+                    "module": "bluebird",
+                    "method": "coroutine"
+                }
+            ],
+            "transform-runtime"
+        ]
+    },
+    {
+        "presets": [
+            [
+                "env",
+                {
+                    "debug": true,
+                    "targets": { "node": 4.3 },
+                    "exclude": [
+                        "transform-es2015-classes",
+                        "transform-regenerator",
+                        "transform-async-to-generator"
+                    ]
+                }
+            ]
+        ],
+        "plugins": [
+            "add-module-exports",
+            "transform-promise-to-bluebird"
+        ]
+    }
+]

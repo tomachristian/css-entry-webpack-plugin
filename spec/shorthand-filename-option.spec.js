@@ -1,18 +1,18 @@
-describe("Running CssEntryPlugin with shorthand output filename option", () => {
-    beforeEach(done => {
+describe("Running CssEntryPlugin with shorthand output filename option", function () {
+    beforeEach(function (done) {
         this.webpack = webpackTestFixture(jasmine)
             .cleanOutput(done);
     });
 
-    describe("configured with a path template", () => {
-        beforeEach(done => {
+    describe("configured with a path template", function () {
+        beforeEach(function (done) {
             this.webpack = webpackTestFixture(jasmine)
                 .withCssEntryPlugin("[name].spec.bundle.css", true)
                 .cleanOutput(done);
         });
 
-        describe("configured with a shorthand single entry (.css)", () => {
-            beforeEach(done => {
+        describe("configured with a shorthand single entry (.css)", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: fixtures.style1.path
@@ -20,9 +20,7 @@ describe("Running CssEntryPlugin with shorthand output filename option", () => {
                     .run(done);
             });
 
-            it("generates a single css bundle with the configured filename", () => {
-                expect(this.webpack).toSucceed();
-
+            it("generates a single css bundle with the configured filename", function () {
                 expect(this.webpack).toOutput({
                     fileCount: 1,
                     file: "main.spec.bundle.css",
@@ -31,8 +29,8 @@ describe("Running CssEntryPlugin with shorthand output filename option", () => {
             });
         });
 
-        describe("configured with multi entry (1: .js, 2: .css)", () => {
-            beforeEach(done => {
+        describe("configured with multi entry (1: .js, 2: .css)", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: {
@@ -43,9 +41,7 @@ describe("Running CssEntryPlugin with shorthand output filename option", () => {
                     .run(done);
             });
 
-            it("generates one js bundle and one css bundle with the configured filename", () => {
-                expect(this.webpack).toSucceed();
-
+            it("generates one js bundle and one css bundle with the configured filename", function () {
                 expect(this.webpack).toOutput({
                     fileCount: 2
                 });
@@ -63,15 +59,15 @@ describe("Running CssEntryPlugin with shorthand output filename option", () => {
         });
     });
 
-    describe("configured with a function", () => {
-        beforeEach(done => {
+    describe("configured with a function", function () {
+        beforeEach(function (done) {
             this.webpack = webpackTestFixture(jasmine)
-                .withCssEntryPlugin(getPath => "prefix-" + getPath("[name].spec.bundle.css"), true)
+                .withCssEntryPlugin(function (getPath) { return "prefix-" + getPath("[name].spec.bundle.css"); }, true)
                 .cleanOutput(done);
         });
 
-        describe("configured with a shorthand single entry (.css)", () => {
-            beforeEach(done => {
+        describe("configured with a shorthand single entry (.css)", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: fixtures.style1.path
@@ -79,9 +75,7 @@ describe("Running CssEntryPlugin with shorthand output filename option", () => {
                     .run(done);
             });
 
-            it("generates a single css bundle with the configured filename", () => {
-                expect(this.webpack).toSucceed();
-
+            it("generates a single css bundle with the configured filename", function () {
                 expect(this.webpack).toOutput({
                     fileCount: 1,
                     file: "prefix-main.spec.bundle.css",
@@ -90,8 +84,8 @@ describe("Running CssEntryPlugin with shorthand output filename option", () => {
             });
         });
 
-        describe("configured with multi entry (1: .js, 2: .css)", () => {
-            beforeEach(done => {
+        describe("configured with multi entry (1: .js, 2: .css)", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         entry: {
@@ -102,9 +96,7 @@ describe("Running CssEntryPlugin with shorthand output filename option", () => {
                     .run(done);
             });
 
-            it("generates one js bundle and one css bundle with the configured filename", () => {
-                expect(this.webpack).toSucceed();
-
+            it("generates one js bundle and one css bundle with the configured filename", function () {
                 expect(this.webpack).toOutput({
                     fileCount: 2
                 });

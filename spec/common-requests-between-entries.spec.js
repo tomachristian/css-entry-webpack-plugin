@@ -1,12 +1,12 @@
-describe("Running CssEntryPlugin for entries with common requests", () => {
-    beforeEach(done => {
+describe("Running CssEntryPlugin for entries with common requests", function () {
+    beforeEach(function (done) {
         this.webpack = webpackTestFixture(jasmine)
             .withCssEntryPlugin()
             .cleanOutput(done);
     });
 
-    describe("configured with two single entries, both with the same file", () => {
-        beforeEach(done => {
+    describe("configured with two single entries, both with the same file", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -16,9 +16,12 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates two css bundles, both with the same css", () => {
+        it("generates two css bundles, both with the same css", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 2
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: fixtures.style1.content,
@@ -31,16 +34,10 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 onlyOnce: true
             });
         });
-
-        it("generates two css bundles only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 2
-            });
-        });
     });
 
-    describe("configured with one single entry and a multi entry, both with the same file only", () => {
-        beforeEach(done => {
+    describe("configured with one single entry and a multi entry, both with the same file only", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -50,9 +47,12 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates two css bundles, both with the same css", () => {
+        it("generates two css bundles, both with the same css", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 2
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: fixtures.style1.content,
@@ -65,16 +65,10 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 onlyOnce: true
             });
         });
-
-        it("generates two css bundles only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 2
-            });
-        });
     });
 
-    describe("configured with two multi entries, both with the same file only", () => {
-        beforeEach(done => {
+    describe("configured with two multi entries, both with the same file only", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -84,9 +78,12 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates two css bundles, both with the same css", () => {
+        it("generates two css bundles, both with the same css", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 2
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: fixtures.style1.content,
@@ -99,16 +96,10 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 onlyOnce: true
             });
         });
-
-        it("generates two css bundles only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 2
-            });
-        });
     });
 
-    describe("configured with two multi entries, both with the same two files only", () => {
-        beforeEach(done => {
+    describe("configured with two multi entries, both with the same two files only", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -118,9 +109,12 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates two css bundles, both with the same css", () => {
+        it("generates two css bundles, both with the same css", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 2
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: [
@@ -139,16 +133,10 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 onlyOnce: true
             });
         });
-
-        it("generates two css bundles only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 2
-            });
-        });
     });
 
-    describe("configured with one single entry and a multi entry with the same file and an extra non-css file", () => {
-        beforeEach(done => {
+    describe("configured with one single entry and a multi entry with the same file and an extra non-css file", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -158,9 +146,12 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates one css bundle and one js bundle, both with the same css", () => {
+        it("generates one css bundle and one js bundle, both with the same css", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 2
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: fixtures.style1.content,
@@ -176,16 +167,10 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 onlyOnce: true
             });
         });
-
-        it("generates one css bundle and one js bundle only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 2
-            });
-        });
     });
 
-    describe("configured with two multi entries with the same file and one with an extra non-css file", () => {
-        beforeEach(done => {
+    describe("configured with two multi entries with the same file and one with an extra non-css file", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -195,9 +180,12 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates one css bundle and one js bundle, both with the same css", () => {
+        it("generates one css bundle and one js bundle, both with the same css", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 2
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: fixtures.style1.content,
@@ -211,12 +199,6 @@ describe("Running CssEntryPlugin for entries with common requests", () => {
                     ...fixtures.style1.content
                 ],
                 onlyOnce: true
-            });
-        });
-
-        it("generates one css bundle and one js bundle only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 2
             });
         });
     });

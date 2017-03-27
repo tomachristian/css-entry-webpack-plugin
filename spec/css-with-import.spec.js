@@ -1,38 +1,32 @@
-describe("Running CssEntryPlugin for css files with imports", () => {
-    beforeEach(done => {
+describe("Running CssEntryPlugin for css files with imports", function () {
+    beforeEach(function (done) {
         this.webpack = webpackTestFixture(jasmine)
             .withCssEntryPlugin()
             .cleanOutput(done);
     });
 
-    describe("configured with a shorthand single entry", () => {
-        beforeEach(done => {
+    describe("configured with a shorthand single entry", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: fixtures.style1WithImport1.path
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates a single css bundle with the imported css", () => {
+        it("generates a single css bundle with the imported css", function () {
             expect(this.webpack).toOutput({
+                fileCount: 1,
                 content: [
                     ...fixtures.style1WithImport1.content,
                     ...fixtures.style1.content
                 ]
             });
         });
-
-        it("generates the css bundle only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 1
-            });
-        });
     });
 
-    describe("configured with two entries, both with the same file", () => {
-        beforeEach(done => {
+    describe("configured with two entries, both with the same file", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -42,9 +36,12 @@ describe("Running CssEntryPlugin for css files with imports", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates two css bundles, both with the imported css", () => {
+        it("generates two css bundles, both with the imported css", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 2
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: [
@@ -61,16 +58,10 @@ describe("Running CssEntryPlugin for css files with imports", () => {
                 ]
             });
         });
-
-        it("generates two css bundles only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 2
-            });
-        });
     });
 
-    describe("configured with two entries, both with the same file and one of them with the imported file in the entry", () => {
-        beforeEach(done => {
+    describe("configured with two entries, both with the same file and one of them with the imported file in the entry", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -80,9 +71,12 @@ describe("Running CssEntryPlugin for css files with imports", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates two css bundles, both with the imported css", () => {
+        it("generates two css bundles, both with the imported css and does not add the content of the additional file twice", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 2
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: [
@@ -96,30 +90,14 @@ describe("Running CssEntryPlugin for css files with imports", () => {
                 withContent: [
                     ...fixtures.style1WithImport1.content,
                     ...fixtures.style1.content
-                ]
-            });
-        });
-
-        it("does not add the content of the additional file twice", () => {
-            expect(this.webpack).toOutput({
-                entry: "test2",
-                withContent: [
-                    ...fixtures.style1WithImport1.content,
-                    ...fixtures.style1.content
                 ],
                 onlyOnce: true
             });
         });
-
-        it("generates two css bundles only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 2
-            });
-        });
     });
 
-    describe("configured with two entries, one with a file that has an import of the file in the other entry", () => {
-        beforeEach(done => {
+    describe("configured with two entries, one with a file that has an import of the file in the other entry", function () {
+        beforeEach(function (done) {
             this.webpack
                 .config({
                     entry: {
@@ -129,9 +107,12 @@ describe("Running CssEntryPlugin for css files with imports", () => {
                 })
                 .run(done);
         });
-        beforeEach(() => expect(this.webpack).toSucceed());
 
-        it("generates two css bundles, both with the imported css", () => {
+        it("generates two css bundles, both with the imported css", function () {
+            expect(this.webpack).toOutput({
+                fileCount: 2
+            });
+
             expect(this.webpack).toOutput({
                 entry: "test1",
                 withContent: [
@@ -143,12 +124,6 @@ describe("Running CssEntryPlugin for css files with imports", () => {
             expect(this.webpack).toOutput({
                 entry: "test2",
                 withContent: fixtures.style1.content
-            });
-        });
-
-        it("generates two css bundles only", () => {
-            expect(this.webpack).toOutput({
-                fileCount: 2
             });
         });
     });

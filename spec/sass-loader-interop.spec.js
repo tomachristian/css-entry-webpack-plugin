@@ -1,5 +1,5 @@
-describe("Running CssEntryPlugin and SassLoader for scss files", () => {
-    beforeEach(done => {
+describe("Running CssEntryPlugin and SassLoader for scss files", function () {
+    beforeEach(function (done) {
         this.webpack = webpackTestFixture(jasmine)
             .withCssEntryPlugin()
             .config({
@@ -24,60 +24,52 @@ describe("Running CssEntryPlugin and SassLoader for scss files", () => {
             .cleanOutput(done);
     });
 
-    describe("configured with a shorthand single entry", () => {
-        beforeEach(() => {
+    describe("configured with a shorthand single entry", function () {
+        beforeEach(function () {
             this.webpack
                 .config({
                     entry: fixtures.scss.style1.path
                 });
         });
 
-        describe("with loader default options", () => {
-            beforeEach(done => this.webpack.run(done));
-            beforeEach(() => expect(this.webpack).toSucceed());
+        describe("with loader default options", function () {
+            beforeEach(function (done) { this.webpack.run(done); });
 
-            it("generates a single css bundle with the compiled scss", () => {
+            it("generates a single css bundle with the compiled scss", function () {
+                expect(this.webpack).toOutput({
+                    fileCount: 1
+                });
+
                 expect(this.webpack).toOutput({
                     content: fixtures.scss.style1.content
                 });
             });
-
-            it("generates the css bundle only", () => {
-                expect(this.webpack).toOutput({
-                    fileCount: 1
-                });
-            });
         });
 
-        describe("with loader source maps", () => {
-            beforeEach(done => {
+        describe("with loader source maps", function () {
+            beforeEach(function (done) {
                 this.webpack
                     .config({
                         devtool: "source-map"
                     })
                     .run(done);
             });
-            beforeEach(() => expect(this.webpack).toSucceed());
 
-            it("generates a single css bundle with the compiled scss", () => {
+            it("generates a single css bundle with the compiled scss and a single css map for the bundle", function () {
+                expect(this.webpack).toOutput({
+                    fileCount: 2
+                });
+
                 expect(this.webpack).toOutput({
                     content: fixtures.scss.style1.content
                 });
-            });
 
-            it("generates a single css map for the bundle", () => {
                 expect(this.webpack).toOutput({
                     file: "main.bundle.css.map",
                     withContent: [
                         "styles/style1.scss",
                         "@extend"
                     ]
-                });
-            });
-
-            it("generates the css bundle only", () => {
-                expect(this.webpack).toOutput({
-                    fileCount: 2
                 });
             });
         });

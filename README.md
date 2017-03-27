@@ -15,6 +15,7 @@ Installation
 ------------
 [![NPM Version][plugin-npm-version-shield]][plugin-npm-url]
 [![Dependency Status][plugin-npm-dependencies-shield]][plugin-npm-dependencies-url]
+[![Node Version][plugin-node-version-shield]][node-url]
 
 Install the plugin using [npm][npm-url]:
 ```shell
@@ -187,6 +188,7 @@ Disables the plugin.
 
 [webpack-url]: https://webpack.js.org/
 [npm-url]: https://www.npmjs.com/
+[node-url]: https://nodejs.org
 
 [plugin-npm-url]: https://npmjs.com/package/css-entry-webpack-plugin
 [plugin-npm-dependencies-url]: https://david-dm.org/tomachristian/css-entry-webpack-plugin
@@ -195,4 +197,5 @@ Disables the plugin.
 [plugin-license-shield]: https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square
 [plugin-npm-version-shield]: https://img.shields.io/npm/v/css-entry-webpack-plugin.svg?style=flat-square
 [plugin-npm-dependencies-shield]: https://david-dm.org/tomachristian/css-entry-webpack-plugin.svg?style=flat-square
+[plugin-node-version-shield]: https://img.shields.io/node/v/css-entry-webpack-plugin.svg?style=flat-square
 [plugin-travis-shield]: https://img.shields.io/travis/tomachristian/css-entry-webpack-plugin/develop.svg?style=flat-square

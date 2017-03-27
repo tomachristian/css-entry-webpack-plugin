@@ -1,6 +1,8 @@
+// TODO: jslint
 const path = require("path");
 
 const merge = require("merge2");
+const lazypipe = require("lazypipe");
 
 const gulp = require("gulp");
 const gulpif = require("gulp-if");
@@ -10,15 +12,30 @@ const ts = require("gulp-typescript");
 const babel = require("gulp-babel");
 const sourcemaps = require("gulp-sourcemaps");
 const jasmine = require("gulp-jasmine");
-const shell = require('gulp-shell')
-const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
-// TODO: jslint
+const shell = require("gulp-shell");
+
+const SpecReporter = require("jasmine-spec-reporter").SpecReporter;
+
 const outDir = path.join(__dirname, "lib"),
       tmpDir = path.join(__dirname, "tmp"),
       specsDir = path.join(__dirname, "spec"),
       srcDir = path.join(__dirname, "src");
 
-let tsProject, tsReporter;
+// TODO: Move from here
+function multiBabel(configFile) {
+    const config = require(configFile);
+
+    var transform = lazypipe();
+
+    config.forEach(function (pass) {
+        pass.babelrc = false;
+        transform = transform.pipe(function () { return babel(pass); });
+    });
+
+    return transform();
+}
+
+var tsProject, tsReporter;
 
 const buildConfig = {
     // Disables the clean process
@@ -27,7 +44,7 @@ const buildConfig = {
     fast: !!util.env.fast,
     sourcemaps: !!util.env.sourcemaps,
     cover: !!util.env.cover
-}
+};
 
 // Cover requires sourcemaps
 if (buildConfig.cover) buildConfig.sourcemaps = true;
@@ -45,19 +62,19 @@ if (buildConfig.cover) {
     console.log("> Code coverage enabled");
 }
 
-gulp.task("clean:lib", () => {
+gulp.task("clean:lib", function () {
     return gulp.src(outDir, { read: false, allowEmpty: true })
         .pipe(gulpif(!buildConfig.dirty, clean()));
 });
 
-gulp.task("clean:tmp", () => {
+gulp.task("clean:tmp", function () {
     return gulp.src(tmpDir, { read: false, allowEmpty: true })
         .pipe(gulpif(!buildConfig.dirty, clean()));
 });
 
 gulp.task("clean", gulp.parallel("clean:lib", "clean:tmp"));
 
-gulp.task("build", gulp.series("clean", () => {
+gulp.task("build", gulp.series("clean", function () {
     if (buildConfig.fast) {
         return Promise.resolve();
     }
@@ -73,11 +90,21 @@ gulp.task("build", gulp.series("clean", () => {
         .pipe(gulpif(buildConfig.sourcemaps, sourcemaps.init()))
         .pipe(tsProject(tsReporter));
 
-    return merge([
+    return build.js
+        .pipe(multiBabel("./babelconfig.json"))
+        .pipe(gulpif(buildConfig.sourcemaps, sourcemaps.write("./", {
+            mapSources: function (sourcePath, file) {
+                return path.resolve(outDir, sourcePath);
+            }
+        })))
+        .pipe(gulp.dest(outDir));
+
+    // TODO: Temporarily disable declarations
+    /*return merge([
         build.js
-            .pipe(babel())
+            .pipe(multiBabel("./babelconfig.json"))
             .pipe(gulpif(buildConfig.sourcemaps, sourcemaps.write("./", {
-                mapSources: (sourcePath, file) => {
+                mapSources: function (sourcePath, file) {
                     return path.resolve(outDir, sourcePath);
                 }
             })))
@@ -85,7 +112,9 @@ gulp.task("build", gulp.series("clean", () => {
 
         build.dts
             .pipe(gulp.dest(outDir))
-    ]);
+    ]);*/
+
+
 }));
 
 gulp.task("watch", gulp.series("build", function watch(_) {
