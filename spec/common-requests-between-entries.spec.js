@@ -5,7 +5,7 @@ describe("Running CssEntryPlugin for entries with common requests", function () 
             .cleanOutput(done);
     });
 
-    describe("configured with two single entries, both with the same file", function () {
+    describe("configured with two single entries (1: 1.css, 2: 1.css)", function () {
         beforeEach(function (done) {
             this.webpack
                 .config({
@@ -24,19 +24,18 @@ describe("Running CssEntryPlugin for entries with common requests", function () 
 
             expect(this.webpack).toOutput({
                 entry: "test1",
-                withContent: fixtures.style1.content,
-                onlyOnce: true
+                withContent: fixtures.style1.content
             });
 
             expect(this.webpack).toOutput({
                 entry: "test2",
-                withContent: fixtures.style1.content,
-                onlyOnce: true
+                withContent: fixtures.style1.content
             });
         });
     });
 
-    describe("configured with one single entry and a multi entry, both with the same file only", function () {
+    describe("configured with a single entry and a multi entry " +
+             "(1: 1.css, 2: [1.css])", function () {
         beforeEach(function (done) {
             this.webpack
                 .config({
@@ -55,19 +54,17 @@ describe("Running CssEntryPlugin for entries with common requests", function () 
 
             expect(this.webpack).toOutput({
                 entry: "test1",
-                withContent: fixtures.style1.content,
-                onlyOnce: true
+                withContent: fixtures.style1.content
             });
 
             expect(this.webpack).toOutput({
                 entry: "test2",
-                withContent: fixtures.style1.content,
-                onlyOnce: true
+                withContent: fixtures.style1.content
             });
         });
     });
 
-    describe("configured with two multi entries, both with the same file only", function () {
+    describe("configured with two multi entries (1: [1.css], 2: [1.css])", function () {
         beforeEach(function (done) {
             this.webpack
                 .config({
@@ -86,19 +83,18 @@ describe("Running CssEntryPlugin for entries with common requests", function () 
 
             expect(this.webpack).toOutput({
                 entry: "test1",
-                withContent: fixtures.style1.content,
-                onlyOnce: true
+                withContent: fixtures.style1.content
             });
 
             expect(this.webpack).toOutput({
                 entry: "test2",
-                withContent: fixtures.style1.content,
-                onlyOnce: true
+                withContent: fixtures.style1.content
             });
         });
     });
 
-    describe("configured with two multi entries, both with the same two files only", function () {
+    describe("configured with two multi entries " +
+             "(1: [1.css, 2.css], 2: [1.css, 2.css])", function () {
         beforeEach(function (done) {
             this.webpack
                 .config({
@@ -120,8 +116,7 @@ describe("Running CssEntryPlugin for entries with common requests", function () 
                 withContent: [
                     ...fixtures.style1.content,
                     ...fixtures.style2.content
-                ],
-                onlyOnce: true
+                ]
             });
 
             expect(this.webpack).toOutput({
@@ -129,13 +124,13 @@ describe("Running CssEntryPlugin for entries with common requests", function () 
                 withContent: [
                     ...fixtures.style1.content,
                     ...fixtures.style2.content
-                ],
-                onlyOnce: true
+                ]
             });
         });
     });
 
-    describe("configured with one single entry and a multi entry with the same file and an extra non-css file", function () {
+    describe("configured with one single entry and a multi entry " +
+             "with an extra non-css file (1: 1.css, 2: [1.css, *.js])", function () {
         beforeEach(function (done) {
             this.webpack
                 .config({
@@ -154,8 +149,7 @@ describe("Running CssEntryPlugin for entries with common requests", function () 
 
             expect(this.webpack).toOutput({
                 entry: "test1",
-                withContent: fixtures.style1.content,
-                onlyOnce: true
+                withContent: fixtures.style1.content
             });
 
             expect(this.webpack).toOutput({
@@ -163,13 +157,13 @@ describe("Running CssEntryPlugin for entries with common requests", function () 
                 withContent: [
                     ...fixtures.script1.content,
                     ...fixtures.style1.content
-                ],
-                onlyOnce: true
+                ]
             });
         });
     });
 
-    describe("configured with two multi entries with the same file and one with an extra non-css file", function () {
+    describe("configured with two multi entries with the same file " +
+             "with an extra non-css file (1: [1.css], 2: [1.css, *.js])", function () {
         beforeEach(function (done) {
             this.webpack
                 .config({
@@ -188,8 +182,7 @@ describe("Running CssEntryPlugin for entries with common requests", function () 
 
             expect(this.webpack).toOutput({
                 entry: "test1",
-                withContent: fixtures.style1.content,
-                onlyOnce: true
+                withContent: fixtures.style1.content
             });
 
             expect(this.webpack).toOutput({
@@ -197,8 +190,7 @@ describe("Running CssEntryPlugin for entries with common requests", function () 
                 withContent: [
                     ...fixtures.script1.content,
                     ...fixtures.style1.content
-                ],
-                onlyOnce: true
+                ]
             });
         });
     });

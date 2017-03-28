@@ -1,4 +1,4 @@
-describe("CssEntryPlugin", function () {
+describe("Using CssEntryPlugin", function () {
     beforeEach(cleanOutput);
 
     it("generates a single output file for a single string entry point", function (done) {

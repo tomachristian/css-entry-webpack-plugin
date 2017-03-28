@@ -217,6 +217,10 @@ const customMatchers = {
                     }
                 }
 
+                if (!expected.hasOwnProperty("onlyOnce")) {
+                    expected.onlyOnce = true;
+                }
+
                 if (expected.file) {
                     let filePath = path.join(OUTPUT_DIR, expected.file);
                     let fileExists = fs.existsSync(filePath);

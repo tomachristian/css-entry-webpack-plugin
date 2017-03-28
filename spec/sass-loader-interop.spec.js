@@ -41,7 +41,8 @@ describe("Running CssEntryPlugin and SassLoader for scss files", function () {
                 });
 
                 expect(this.webpack).toOutput({
-                    content: fixtures.scss.style1.content
+                    content: fixtures.scss.style1.content,
+                    onlyOnce: false // TODO: check if this is correct
                 });
             });
         });
@@ -61,7 +62,8 @@ describe("Running CssEntryPlugin and SassLoader for scss files", function () {
                 });
 
                 expect(this.webpack).toOutput({
-                    content: fixtures.scss.style1.content
+                    content: fixtures.scss.style1.content,
+                    onlyOnce: false
                 });
 
                 expect(this.webpack).toOutput({
@@ -69,7 +71,8 @@ describe("Running CssEntryPlugin and SassLoader for scss files", function () {
                     withContent: [
                         "styles/style1.scss",
                         "@extend"
-                    ]
+                    ],
+                    onlyOnce: false
                 });
             });
         });
