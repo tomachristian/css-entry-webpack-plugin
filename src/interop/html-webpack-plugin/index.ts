@@ -1,7 +1,7 @@
-import { WithHtmlWebpackPlugin } from "html-webpack-plugin";
+import { WithHtmlWebpackPlugin, HtmlData, HtmlAssetTag } from "html-webpack-plugin";
 import { Compilation } from "../webpack";
 
-export * from "html-webpack-plugin";
+export { HtmlData, HtmlAssetTag };
 
 export function getHtmlWebpackPluginCompilation(compilation: Compilation): WithHtmlWebpackPlugin {
     return compilation as any;
