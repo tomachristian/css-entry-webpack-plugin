@@ -2,7 +2,6 @@ import Tapable,
        { AsyncWaterfallCallback, AsyncWaterfallHandler,
          AsyncCallback, AsyncHandler } from "tapable";
 
-export * from "tapable";
 export default Tapable;
 
 /**
