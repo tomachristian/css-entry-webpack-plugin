@@ -4,7 +4,11 @@
         "types": [
             "node",
             "bluebird-global",
-            "mocha"
+            "mocha",
+            "chai"
         ]
-    }
+    },
+    "include": [
+        "./**/*.spec.ts"
+    ]
 }

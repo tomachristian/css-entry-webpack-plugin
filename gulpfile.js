@@ -9,13 +9,18 @@ const clean = require("gulp-clean");
 const ts = require("gulp-typescript");
 const babel = require("gulp-babel");
 const sourcemaps = require("gulp-sourcemaps");
-const jasmine = require("gulp-jasmine");
-const shell = require('gulp-shell')
-const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+//const jasmine = require("gulp-jasmine");
+const mocha = require("gulp-mocha");
+const shell = require("gulp-shell");
+//const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+
+const ProjectCompiler = require("./scripts/ProjectCompiler");
+
 // TODO: jslint
 const outDir = path.join(__dirname, "lib"),
       tmpDir = path.join(__dirname, "tmp"),
       specsDir = path.join(__dirname, "spec"),
+      testDir = path.join(__dirname, "test"),
       srcDir = path.join(__dirname, "src");
 
 let tsProject, tsReporter;
@@ -94,9 +99,20 @@ gulp.task("watch", gulp.series("build", function watch(_) {
     gulp.watch(path.join(srcDir, "**/*"), { mode: "poll" }, gulp.series("build"));
 }));
 
+// Builds the tests
+gulp.task("build:test", () => {
+    if (buildConfig.fast) {
+        return Promise.resolve();
+    }
+
+    var test = new ProjectCompiler(testDir);
+    return test.build()
+        .pipe(gulp.dest(path.join(tmpDir, "test")));
+});
+
 gulp.task("test:cover", shell.task("nyc -c false gulp test --dirty --fast"));
-gulp.task("test", gulp.series("build", buildConfig.cover ? gulp.series("test:cover") : function test() {
-    const config = require(path.join(specsDir, "support/jasmine.json"));
+gulp.task("test", gulp.series("build", "build:test", buildConfig.cover ? gulp.series("test:cover") : function test() {
+    /*const config = require(path.join(specsDir, "support/jasmine.json"));
     const reporter = new SpecReporter({
         spec: {
             displayPending: true,
@@ -108,10 +124,16 @@ gulp.task("test", gulp.series("build", buildConfig.cover ? gulp.series("test:cov
         }
     });
     // TODO: Load glob from spec/support/jasmine.json (config)
-    return gulp.src(path.join(specsDir, "**/*.spec.js"))
+    return gulp.src(path.join(specsDir, "**//*.spec.js"))
         .pipe(jasmine({
             config: config,
             reporter: reporter
+        }));*/
+
+    return gulp.src(path.join(tmpDir, "test", "**/*.spec.js"), { read: false })
+        .pipe(mocha({
+            require: path.join(specsDir, "helpers/common.js")
+            //reporter: "nyan"
         }));
 }));
 
