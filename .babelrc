@@ -1,4 +1,13 @@
-// Used for .babel.js files
+// Used only for .babel.js files
 {
-  "presets": ["es2015"]
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": true
+        }
+      }
+    ]
+  ]
 }

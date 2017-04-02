@@ -16,6 +16,8 @@ const shell = require("gulp-shell");
 
 const SpecReporter = require("jasmine-spec-reporter").SpecReporter;
 
+const ProjectCompiler = require("./scripts/ProjectCompiler");
+
 const outDir = path.join(__dirname, "lib"),
       tmpDir = path.join(__dirname, "tmp"),
       specsDir = path.join(__dirname, "spec"),
@@ -143,6 +145,11 @@ gulp.task("test", gulp.series("build", buildConfig.cover ? gulp.series("test:cov
             reporter: reporter
         }));
 }));
+
+gulp.task("builder", () => {
+    let compiler = new ProjectCompiler(srcDir);
+    console.log(compiler.config);
+});
 
 gulp.task("dev", gulp.series("watch"));
 gulp.task("default", gulp.series("build"));

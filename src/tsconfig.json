@@ -5,5 +5,8 @@
             "node",
             "bluebird-global"
         ]
-    }
+    },
+    "include": [
+        "./**/*.ts"
+    ]
 }

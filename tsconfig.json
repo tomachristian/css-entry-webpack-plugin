@@ -55,8 +55,5 @@
         "listFiles": true,
         "listEmittedFiles": true
     },
-    "compileOnSave": false,
-    "include": [
-        "./src"
-    ]
+    "compileOnSave": false
 }

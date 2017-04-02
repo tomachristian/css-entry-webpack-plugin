@@ -1,0 +1,15 @@
+{
+    "library": true,
+    "plugins": [
+        "transform-promise-to-bluebird",
+        "transform-async-to-bluebird"
+    ],
+    "env": {
+        "targets": {
+            "node": 4.3
+        }
+    },
+    "output": {
+        "path": "../lib"
+    }
+}
