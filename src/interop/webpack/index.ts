@@ -19,6 +19,11 @@ export {
 
 export const multiEntryDependencyLocSeparator = ":";
 
+export const webpackDevServerResourceTests = [
+    /webpack-dev-server(\/|\\)client/,
+    /webpack\/hot/
+];
+
 export function loaderToIdent(data) {
     if (!data.options)
         return data.loader;
@@ -33,4 +38,13 @@ export function loaderToIdent(data) {
 
 export function loadersToRequestIdent(loaders, resource) {
     return loaders.map(loaderToIdent).concat([resource]).join("!");
+}
+
+export function isWebpackDevServerResource(resource: string): boolean {
+    return webpackDevServerResourceTests
+        .some(resourceTest => resourceTest.test(resource));
+}
+
+export function excludeWebpackDevServerResources(resources: string[]): string[] {
+    return resources.filter(resource => !isWebpackDevServerResource(resource));
 }

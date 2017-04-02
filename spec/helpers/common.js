@@ -7,6 +7,8 @@ const CssEntryPlugin = require("../../lib");
 const CssEntryPluginError = require("../../lib/CssEntryPluginError");
 const webpack = require("webpack");
 const webpackMerge = require("webpack-merge");
+const Server = require("webpack-dev-server/lib/Server");
+const request = require("supertest");
 
 const FIXTURES_DIR = path.join(__dirname, "../fixtures");
 const OUTPUT_DIR = path.join(__dirname, "../../tmp");
@@ -46,6 +48,10 @@ class WebpackTestFixture {
         };
 
         this.result = null;
+
+        this.compiler = null;
+        this.server = null;
+        this.client = null;
     }
 
     cleanOutput(done) {
@@ -87,19 +93,17 @@ class WebpackTestFixture {
         let run = new Promise((resolve, reject) => {
             try {
                 webpack(this.webpackConfig, (err, stats) => {
-                    this.result = {
-                        err: err,
-                        stats: stats
-                    };
+                    this.result = { err, stats };
                     resolve(this);
                 });
             }
             catch (err) {
+                console.error(err);
                 this.result = {
-                    err: err,
+                    err,
                     stats: null
                 };
-                reject(err);
+                resolve(this);
             }
         });
 
@@ -107,7 +111,74 @@ class WebpackTestFixture {
             return run;
         }
 
-        run.then(done, done);
+        run.then(done, err => console.error(err));
+        return this;
+    }
+
+    serve(done) {
+        const host = "localhost",
+              port = 8080;
+
+        let run = new Promise((resolve, reject) => {
+            try {
+                let devServerOptions = this.webpackConfig.devServer || {};
+
+                devServerOptions.host = host;
+                devServerOptions.port = port;
+
+                if (devServerOptions.quiet === undefined) {
+                    devServerOptions.quiet = true;
+                }
+
+                if (devServerOptions.inline === undefined) {
+                    devServerOptions.inline = true;
+                }
+
+                Server.addDevServerEntrypoints(this.webpackConfig, devServerOptions);
+                this.compiler = webpack(this.webpackConfig);
+                this.server = new Server(this.compiler, devServerOptions);
+                this.client = request(this.server.app);
+
+                this.server.listen(port, host, err => {
+                    this.result = {
+                        err,
+                        stats: null
+                    };
+                    resolve(this);
+                });
+            }
+            catch (err) {
+                console.error(err);
+                this.result = {
+                    err,
+                    stats: null
+                };
+                resolve(this);
+            }
+        });
+
+        if (!done) return run;
+
+        run.then(done, err => console.error(err));
+        return this;
+    }
+
+    close(done) {
+        let close = new Promise((resolve, reject) => {
+            if (!this.server) {
+                resolve(this);
+                return;
+            }
+
+            this.server.close(() => {
+                this.server = null;
+                resolve(this);
+            });
+        });
+
+        if (!done) return close;
+
+        close.then(done, err => console.error(err));
         return this;
     }
 }

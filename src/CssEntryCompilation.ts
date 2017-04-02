@@ -3,7 +3,9 @@ import { Compiler, Compilation,
          Resolver, Loader,
          SingleEntryDependency, MultiModule, Chunk, Assets,
          AfterResolveData,
-         multiEntryDependencyLocSeparator, loadersToRequestIdent } from "./interop/webpack";
+         multiEntryDependencyLocSeparator, loadersToRequestIdent,
+         excludeWebpackDevServerResources, isWebpackDevServerResource
+} from "./interop/webpack";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
 import { NormalizedOptions } from "./options";
 import { EntryInfo, TaggedMultiModule, isCssEntry } from "./models";
@@ -93,6 +95,7 @@ export default class CssEntryCompilation extends Tapable {
      */
     private async onEntryRequestAfterResolve(
         entry: EntryInfo, data: AfterResolveData): Promise<AfterResolveData> {
+        // TODO: do isCssResource()
         let isCssEntry = await this.isCssEntry(entry, data);
 
         if (!isCssEntry) {
@@ -101,6 +104,11 @@ export default class CssEntryCompilation extends Tapable {
         }
 
         this.cssEntries.add(entry.name);
+
+        if (isWebpackDevServerResource(data.resource)) {
+            return data;
+        }
+
         return this.extractCss(data);
     }
 
@@ -148,6 +156,8 @@ export default class CssEntryCompilation extends Tapable {
         }
 
         let resources = await this.resolveResources(multiModule);
+            resources = excludeWebpackDevServerResources(resources);
+
         let hasOnlyCssResources = resources.every(resource =>
             this.options.isCssResource(resource, entryInfo));
 
