@@ -13,6 +13,7 @@ const babel = require("gulp-babel");
 const sourcemaps = require("gulp-sourcemaps");
 const jasmine = require("gulp-jasmine");
 const shell = require("gulp-shell");
+const babel2 = require("./scripts/babel");
 
 const SpecReporter = require("jasmine-spec-reporter").SpecReporter;
 
@@ -147,8 +148,12 @@ gulp.task("test", gulp.series("build", buildConfig.cover ? gulp.series("test:cov
 }));
 
 gulp.task("builder", () => {
-    let compiler = new ProjectCompiler(srcDir);
-    console.log(compiler.config);
+    /*let compiler = new ProjectCompiler(srcDir);
+    console.log(compiler.config);*/
+
+    return gulp.src("./gulpfile.babel.js")
+        .pipe(babel2([{ plugins: ["add-module-exports"] }, {}]))
+        .pipe(gulp.dest("./tmp"));
 });
 
 gulp.task("dev", gulp.series("watch"));

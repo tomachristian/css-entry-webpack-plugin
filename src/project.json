@@ -1,5 +1,4 @@
 {
-    "library": true,
     "plugins": [
         "transform-promise-to-bluebird",
         "transform-async-to-bluebird"
