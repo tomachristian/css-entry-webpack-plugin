@@ -24,6 +24,12 @@ const outDir = path.join(__dirname, "lib"),
       specsDir = path.join(__dirname, "spec"),
       srcDir = path.join(__dirname, "src");
 
+import ProjectConfiguration from "./scripts/ProjectConfiguration";
+
+gulp.task("t", () => {
+    console.log(ProjectConfiguration.load("./src"));
+});
+
 // TODO: Move from here
 function multiBabel(configFile) {
     const config = require(configFile);
