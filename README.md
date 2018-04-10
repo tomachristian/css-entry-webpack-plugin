@@ -1,3 +1,5 @@
+_With the advent of native CSS modules support in Webpack (https://github.com/webpack/webpack/pull/6448) and due to lack of time in maintaining this package, the project has been discontinued. If anyone wants to continue work on this, PRs are welcome._
+
 <div align="center">
   <a href="https://github.com/webpack/webpack">
     <img width="200" height="200"
